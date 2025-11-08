@@ -119,7 +119,9 @@ void LaboratoryWorks::submitWork(int workNumber, int grade, int difficulty) {
     // Запись данных в массивы
     grades[workNumber - 1] = grade;
     difficulties[workNumber - 1] = difficulty;
-    completedWorks++;
+    if (grades[workNumber - 1] == 0) {
+        completedWorks++;
+    }
 
     // Пересчет среднего балла
     recalculateAverage();
@@ -155,7 +157,7 @@ LaboratoryWorks& LaboratoryWorks::operator=(const LaboratoryWorks& other) {
         delete[] grades;
         delete[] difficulties;
 
-        // Копирование простых полей
+        // Копирование полей
         totalWorks = other.totalWorks;
         completedWorks = other.completedWorks;
         currentAverage = other.currentAverage;
