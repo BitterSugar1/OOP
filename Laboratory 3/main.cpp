@@ -131,16 +131,49 @@ void testCompleteWorkflow() {
     }
 }
 
+// Функция для тестирования перегруженных операторов
+void testOverloadedOperators() {
+    std::cout << "\n=== Тестирование перегруженных операторов ===" << std::endl;
+
+    try {
+        // Создание объектов с использованием перегруженного конструктора
+        LaboratoryWorks lab1("ООП", 5, 12.5, "Иванов Иван");
+        LaboratoryWorks lab2("Базы данных", 3, 8.0); // Исполнитель по умолчанию
+
+        std::cout << "Использование оператора <<:" << std::endl;
+        std::cout << lab1;
+        std::cout << lab2;
+
+        // Тестирование оператора += (внутри класса)
+        std::cout << "Добавление времени выполнения (5 часов):" << std::endl;
+        lab1 += 5.0;
+        std::cout << lab1 << "\r";
+
+        // Тестирование внешнего оператора +=
+        double totalTime = 0.0;
+        totalTime += lab1;
+        totalTime += lab2;
+        std::cout << "Общее затраченное время на все задачи: " << totalTime << " часов" << std::endl;
+
+    }
+    catch (const std::exception& e) {
+        std::cerr << "Ошибка при тестировании операторов: " << e.what() << std::endl;
+    }
+}
+
+// Остальные тестовые функции остаются без изменений...
+
 int main() {
     setlocale(LC_ALL, "Russian");
 
-    std::cout << "Лабораторная работа №1: Учет сдачи лабораторных работ\n" << std::endl;
+    std::cout << "Лабораторная работа №3: Перегрузка методов и операторов\n" << std::endl;
 
     // Запуск всех тестов
     testNormalCase();
     testErrorCases();
     testCopyAndAssignment();
     testCompleteWorkflow();
+    testOverloadedOperators(); // Новая тестовая функция
 
     std::cout << "\nТестирование завершено!" << std::endl;
 

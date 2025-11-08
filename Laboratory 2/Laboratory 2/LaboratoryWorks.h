@@ -12,12 +12,12 @@ private:
 	static const int MAX_DIFFICULTY = 5;	// Сложность
 
 	// Приватные поля класса
-	char* discipline;          // Название дисциплины
-	int totalWorks;           // Общее количество лабораторных работ
-	int completedWorks;       // Количество сданных работ
-	int* grades;              // Динамический массив оценок
-	int* difficulties;        // Динамический массив сложностей
-	double currentAverage;    // Текущий средний балл
+	char* discipline = nullptr;          // Название дисциплины
+	int totalWorks;                      // Общее количество лабораторных работ
+	int completedWorks;                  // Количество сданных работ
+	int* grades = nullptr;               // Динамический массив оценок
+	int* difficulties = nullptr;         // Динамический массив сложностей
+	double currentAverage;               // Текущий средний балл
 
 	// Приватные методы для валидации
 	void validateGrade(int grade) const;
@@ -26,39 +26,39 @@ private:
 	void recalculateAverage(); // Пересчет среднего балла
 
 public:
-
+#pragma region shadow_constructor
 	// Конструктор с параметром
-	//LaboratoryWorks(const char* const discipline, int totalWorks)
-	//	: 
-	//	discipline(nullptr),
-	//	totalWorks(totalWorks),
-	//	completedWorks(0),
-	//	grades(nullptr),
-	//	difficulties(nullptr),
-	//	currentAverage(0.0)
-	//{
-	//	if (discipline == nullptr) {
-	//		throw std::exception("Ошибка: название дисциплины не может быть пустым!"); 
-	//	}
+		//LaboratoryWorks(const char* const discipline, int totalWorks)
+		//	: 
+		//	discipline(nullptr),
+		//	totalWorks(totalWorks),
+		//	completedWorks(0),
+		//	grades(nullptr),
+		//	difficulties(nullptr),
+		//	currentAverage(0.0)
+		//{
+		//	if (discipline == nullptr) {
+		//		throw std::exception("Ошибка: название дисциплины не может быть пустым!"); 
+		//	}
 
-	//	if (strlen(discipline) == 0) {
-	//		throw std::exception("Ошибка: название дисциплины не может быть пустым!");
-	//	}
+		//	if (strlen(discipline) == 0) {
+		//		throw std::exception("Ошибка: название дисциплины не может быть пустым!");
+		//	}
 
-	//	for (int i = 0; strlen(discipline); ++i) {
-	//		throw std::exception(""); 
-	//	}
+		//	for (int i = 0; strlen(discipline); ++i) {
+		//		throw std::exception(""); 
+		//	}
 
-	//	if (totalWorks < MIN_WORKS || totalWorks > MAX_WORKS) {
-	//		throw std::exception("Ошибка: количество лабораторных работ выходит за пределы!");
-	//	}
+		//	if (totalWorks < MIN_WORKS || totalWorks > MAX_WORKS) {
+		//		throw std::exception("Ошибка: количество лабораторных работ выходит за пределы!");
+		//	}
 
-	//	// Дисциплина и тотал воркс проверка
+		//	// Дисциплина и тотал воркс проверка
 
-	//	this->discipline = new char[strlen(discipline) + 1] {0};
-	//	strcpy_s();
-	//}
-
+		//	this->discipline = new char[strlen(discipline) + 1] {0};
+		//	strcpy_s();
+		//}
+#pragma endregion
 
 	 // Конструктор с параметрами
 	LaboratoryWorks(const char* discipline, int totalWorks);
