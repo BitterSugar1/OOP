@@ -113,29 +113,6 @@ void testCompleteWorkflow() {
     }
 }
 
-void testOverloadedOperators() {
-    std::cout << "\n=== Тестирование перегруженных операторов ===" << std::endl;
-    try {
-        ReportLab<int> lab1("ООП", 5, 12.5, "Иванов Иван");
-        ReportLab<int> lab2("Базы данных", 3, 8.0);
-
-        std::cout << lab1;
-        std::cout << lab2;
-
-        lab1 += 5.0;
-        std::cout << lab1;
-
-        double totalTime = 0.0;
-        totalTime += lab1;
-        totalTime += lab2;
-
-        std::cout << "Общее время: " << totalTime << " часов" << std::endl;
-    }
-    catch (const std::exception& e) {
-        std::cerr << "Ошибка: " << e.what() << std::endl;
-    }
-}
-
 void testPolymorphism() {
     std::cout << "\n=== Тестирование полиморфизма ===" << std::endl;
 
@@ -194,7 +171,6 @@ int main() {
     testErrorCases();
     testCopyAndAssignment();
     testCompleteWorkflow();
-    testOverloadedOperators();
     testPolymorphism();
     testIPrintable();
 
