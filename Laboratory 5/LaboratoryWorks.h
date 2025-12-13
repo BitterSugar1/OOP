@@ -1,80 +1,84 @@
-// LaboratoryWorks.h
 #pragma once
 #include <string>
 #include <iostream>
 #include <iomanip>
 #include "IPrintable.h"
 
+// Шаблонный класс: T — тип оценки (int или double)
+template<typename T>
 class LaboratoryWorks : public IPrintable
 {
-private:
-    // Статические константы
+protected:
     static const int MIN_WORKS = 1;
     static const int MAX_WORKS = 20;
     static const int MIN_GRADE = 1;
-    static const int MAX_GRADE = 10; // Оценки
+    static const int MAX_GRADE = 10;
     static const int MIN_DIFFICULTY = 1;
-    static const int MAX_DIFFICULTY = 5; // Сложность
+    static const int MAX_DIFFICULTY = 5;
 
+    char* discipline = nullptr;
+    char* executor = nullptr;
 
-    // Приватные поля класса
-    char* discipline = nullptr; // Название дисциплины
-    double currentAverage; // Текущий средний балл
-    double executionTime; // Время выполнения (в часах)
-    char* executor = nullptr; // Исполнитель работ
+    T currentAverage;        //  Теперь шаблонный тип
+    double executionTime;
 
+    int totalWorks;
+    int completedWorks;
 
-    // Приватные методы для валидации
-    void validateGrade(int grade) const;
-    void validateDifficulty(int difficulty) const;
-    void validateWorkNumber(int workNumber) const;
-    void recalculateAverage(); // Пересчет среднего балла
+    T* grades = nullptr;     //  Теперь шаблонный массив
+    int* difficulties = nullptr;
 
-protected:
-    int totalWorks; // Общее количество лабораторных работ
-    int completedWorks; // Количество сданных работ
-    int* grades = nullptr; // Динамический массив оценок
-    int* difficulties = nullptr; // Динамический массив сложностей
+    // Проверки
+    void validateGrade(T grade) const {
+        if (grade < MIN_GRADE || grade > MAX_GRADE)
+            throw std::out_of_range("Оценка вне диапазона");
+    }
+
+    void validateDifficulty(int difficulty) const {
+        if (difficulty < MIN_DIFFICULTY || difficulty > MAX_DIFFICULTY)
+            throw std::out_of_range("Сложность вне диапазона");
+    }
+
+    void validateWorkNumber(int workNumber) const {
+        if (workNumber < 1 || workNumber > totalWorks)
+            throw std::out_of_range("Неверный номер работы");
+        if (grades[workNumber - 1] != 0)
+            throw std::invalid_argument("Работа уже сдана");
+    }
+
+    // Пересчёт среднего балла
+    void recalculateAverage() {
+        if (completedWorks == 0) {
+            currentAverage = T(0);
+            return;
+        }
+
+        T sum = 0;
+        for (int i = 0; i < totalWorks; i++)
+            sum += grades[i];
+
+        currentAverage = sum / completedWorks;
+    }
 
 public:
-    // Конструкторы
     LaboratoryWorks(const char* discipline, int totalWorks);
-    LaboratoryWorks(const char* discipline, int totalWorks, double executionTime, const char* executor = "Unknown");
-    
-    // Конструктор копирования
-    LaboratoryWorks(const LaboratoryWorks& other);
+    LaboratoryWorks(const char* discipline, int totalWorks, double executionTime, const char* executor);
 
-    // Деструктор
+    LaboratoryWorks(const LaboratoryWorks& other);
     virtual ~LaboratoryWorks();
 
-    // Селекторы (геттеры)
-    const char* getDiscipline() const { return discipline; }
-    int getTotalWorks() const { return totalWorks; }
-    int getCompletedWorks() const { return completedWorks; }
-    double getCurrentAverage() const { return currentAverage; }
-    double getExecutionTime() const { return executionTime; }
-    const char* getExecutor() const { return executor; }
+    // Сдача работы
+    void submitWork(int workNumber, T grade, int difficulty);
 
-    // Модификаторы (сеттеры)
-    void setExecutionTime(double time) { executionTime = time; }
-    void setExecutor(const char* newExecutor);
+    // Геттеры
+    T getCurrentAverage() const { return currentAverage; }
 
-    // Публичные методы
-    void submitWork(int workNumber, int grade, int difficulty);
-    virtual void printStatus() const; // Вывод информации о состоянии
-
-    // Абстрактные методы для интерфейса отчетов
+    // Интерфейсные методы
     virtual void submitReport(int workNumber) = 0;
     virtual bool isReportSubmitted(int workNumber) const = 0;
     virtual int getReportsSubmitted() const = 0;
     virtual int getReportsRemaining() const = 0;
 
-    // Операторы
-    LaboratoryWorks& operator=(const LaboratoryWorks& other);
-    LaboratoryWorks& operator+=(double additionalTime); // Добавление времени выполнения
-
-    // Дружественные операторы
-    friend std::ostream& operator<<(std::ostream& out, const LaboratoryWorks& labWork);
+    virtual void printStatus() const override;
 };
-// Внешний оператор для расчета общего времени
-double& operator+=(double& sum, const LaboratoryWorks& labWork);
+

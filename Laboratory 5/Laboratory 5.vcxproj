@@ -127,7 +127,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="IPrintable.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="LaboratoryWorks.cpp" />
     <ClCompile Include="ReportLab.cpp" />

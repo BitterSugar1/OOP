@@ -1,34 +1,60 @@
 #pragma once
 #include "LaboratoryWorks.h"
-class ReportLab : public LaboratoryWorks
+
+template<typename T>
+class ReportLab : public LaboratoryWorks<T>
 {
 private:
-    bool* reports; // Динамический массив для отметок о сдаче отчетов
-    int reportsSubmitted; // Количество сданных отчетов
+    bool* reports;
+    int reportsSubmitted;
 
 public:
+    ReportLab(const char* discipline, int totalWorks)
+        : LaboratoryWorks<T>(discipline, totalWorks), reportsSubmitted(0)
+    {
+        reports = new bool[totalWorks] {};
+    }
 
-    // Конструкторы
-    ReportLab(const char* discipline, int totalWorks);
-    ReportLab(const char* discipline, int totalWorks, double executionTime, const char* executor = "Unknown");
-    
-    // Конструктор копирования
-    ReportLab(const ReportLab& other);
+    ReportLab(const char* discipline, int totalWorks, double time, const char* exec)
+        : LaboratoryWorks<T>(discipline, totalWorks, time, exec), reportsSubmitted(0)
+    {
+        reports = new bool[totalWorks] {};
+    }
 
-    // Деструктор
-    ~ReportLab();
+    ~ReportLab() {
+        delete[] reports;
+    }
 
-    // Метод для сдачи отчета
-    void submitReport(int workNumber) override;
+    void submitReport(int workNumber) override {
+        if (workNumber < 1 || workNumber > this->totalWorks)
+            throw std::out_of_range("Неверный номер работы");
 
-    // Переопределенный метод вывода информации
-    virtual void printStatus() const override;
+        int idx = workNumber - 1;
 
-    // Оператор присваивания
-    ReportLab& operator=(const ReportLab& other);
+        if (this->grades[idx] == 0)
+            throw std::invalid_argument("Нельзя сдавать отчёт до сдачи работы");
 
-    // Геттеры
-    int getReportsSubmitted() const override;
-    int getReportsRemaining() const override;
-    bool isReportSubmitted(int workNumber) const override;
+        if (reports[idx])
+            throw std::invalid_argument("Отчёт уже сдан");
+
+        reports[idx] = true;
+        reportsSubmitted++;
+    }
+
+    bool isReportSubmitted(int workNumber) const override {
+        return reports[workNumber - 1];
+    }
+
+    int getReportsSubmitted() const override {
+        return reportsSubmitted;
+    }
+
+    int getReportsRemaining() const override {
+        return this->completedWorks - reportsSubmitted;
+    }
+
+    void printStatus() const override {
+        LaboratoryWorks<T>::printStatus();
+        std::cout << "Отчётов сдано: " << reportsSubmitted << "\n";
+    }
 };
